@@ -33,6 +33,7 @@
             txtPassword = new TextBox();
             lblPassword = new Label();
             btnSignIn = new Button();
+            chkRememberMe = new CheckBox();
             SuspendLayout();
             // 
             // lblUsername
@@ -71,7 +72,7 @@
             // 
             // btnSignIn
             // 
-            btnSignIn.Location = new Point(297, 248);
+            btnSignIn.Location = new Point(318, 248);
             btnSignIn.Name = "btnSignIn";
             btnSignIn.Size = new Size(158, 44);
             btnSignIn.TabIndex = 4;
@@ -79,11 +80,22 @@
             btnSignIn.UseVisualStyleBackColor = true;
             btnSignIn.Click += btnSignIn_Click;
             // 
+            // chkRememberMe
+            // 
+            chkRememberMe.AutoSize = true;
+            chkRememberMe.Location = new Point(318, 298);
+            chkRememberMe.Name = "chkRememberMe";
+            chkRememberMe.Size = new Size(176, 34);
+            chkRememberMe.TabIndex = 5;
+            chkRememberMe.Text = "Remember me";
+            chkRememberMe.UseVisualStyleBackColor = true;
+            // 
             // AuthorizationForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chkRememberMe);
             Controls.Add(btnSignIn);
             Controls.Add(txtPassword);
             Controls.Add(lblPassword);
@@ -105,5 +117,6 @@
         private TextBox txtPassword;
         private Label lblPassword;
         private Button btnSignIn;
+        private CheckBox chkRememberMe;
     }
 }

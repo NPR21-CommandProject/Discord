@@ -11,8 +11,15 @@ namespace DiscordWinForm
         static void Main()
         {
             // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            Application.Run(new InitialForm());
+            UserAuthorizationHelper uah = new UserAuthorizationHelper();
+            if(uah.Deserialize()) {
+                Application.Run(new AuthorizationForm(uah));
+            }
+            else
+            {
+                // see https://aka.ms/applicationconfiguration.
+                Application.Run(new InitialForm());
+            }
         }
     }
 }

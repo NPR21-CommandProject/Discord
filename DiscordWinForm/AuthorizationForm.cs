@@ -22,14 +22,27 @@ namespace DiscordWinForm
             InitializeComponent();
         }
 
+        public AuthorizationForm(UserAuthorizationHelper uah)
+        {
+            UserHelper = new UserHelper();
+            InitializeComponent();
+            txtUsername.Text = uah.Username;
+            txtPassword.Text = uah.Password;
+        }
+
         private void btnSignIn_Click(object sender, EventArgs e)
         {
             if (txtUsername.Text != string.Empty && txtPassword.Text != string.Empty)
             {
+                
                 User user = UserHelper.GetUser(txtUsername.Text, txtPassword.Text);
                 if (user != null)
                 {
-
+                    if (chkRememberMe.Checked)
+                    {
+                        UserAuthorizationHelper af = new UserAuthorizationHelper(txtUsername.Text, txtPassword.Text);
+                        af.Serialize();
+                    }
 
                     //допиши сюда передачу user в основну форму
 
