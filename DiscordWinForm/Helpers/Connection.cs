@@ -5,9 +5,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace DiscordWinForm.Helpers
 {
+    public class ConnectionStrings
+    {
+        public string MSSQLServerConnection { get; set; }
+    }
+
     static class Connection
     {
         public static readonly SqlConnection sqlConnection;
@@ -20,8 +26,12 @@ namespace DiscordWinForm.Helpers
 
             IConfiguration configuration = builder.Build();
 
-            sqlConnection = new SqlConnection(configuration.GetConnectionString("MSSQLServerConnection") ?? "Data Source=.;Integrated Security=True;" + $"Initial Catalog=Discord;");
+            sqlConnection = new SqlConnection(configuration.GetConnectionString("MSSQLServerConnection") ?? "Data Source=.;Integrated Security=True;"); // + $" Initial Catalog=DiscordDb;");
             sqlConnection.Open();
+
+            SqlCommand sql = sqlConnection.CreateCommand();
+            sql.CommandText = "Use DiscordDb";
+            sql.ExecuteNonQuery();
         }
 
         

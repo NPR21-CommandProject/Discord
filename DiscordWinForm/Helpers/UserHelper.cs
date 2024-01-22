@@ -18,7 +18,7 @@ namespace DiscordWinForm.Helpers
         public User GetUser(string Username, string Password)
         {
             SqlCommand sqlCommand = Connection.sqlConnection.CreateCommand();
-            sqlCommand.CommandText = $"Select ID, Username, Nickname, Password, Picture FROM GetUser({Username}, {Password});";
+            sqlCommand.CommandText = $"Select ID, Username, Nickname, Password, Picture FROM GetUser('{Username}', '{Password}');";
             using(SqlDataReader reader = sqlCommand.ExecuteReader())
             {
                 if(reader.Read())
@@ -30,6 +30,12 @@ namespace DiscordWinForm.Helpers
             }
         }
 
-
+        static public void AddUser(string Username, string Nickname, string Password, string PictureURL)
+        {
+            SqlCommand sqlCommand = Connection.sqlConnection.CreateCommand();
+            sqlCommand.CommandText = $"EXEC AddUser @Username = '{Username}', @Nickname = '{Nickname}', " +
+                $" @Password = '{Password}', @Picture = '{PictureURL}';";
+            sqlCommand.ExecuteNonQuery();
+        }
     }
 }

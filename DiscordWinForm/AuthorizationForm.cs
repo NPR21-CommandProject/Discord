@@ -34,7 +34,6 @@ namespace DiscordWinForm
         {
             if (txtUsername.Text != string.Empty && txtPassword.Text != string.Empty)
             {
-                
                 User user = UserHelper.GetUser(txtUsername.Text, txtPassword.Text);
                 if (user != null)
                 {
@@ -48,12 +47,9 @@ namespace DiscordWinForm
 
 
                 }
-                MessageBox.Show("There is no such user");
+                else MessageBox.Show("There is no such user");
             }
-            else
-            {
-                MessageBox.Show("You haven't entered username or password");
-            }
+            else MessageBox.Show("You haven't entered username or password");
         }
 
         private void AuthorizationForm_Load(object sender, EventArgs e)

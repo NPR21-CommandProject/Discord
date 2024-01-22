@@ -27,11 +27,10 @@ namespace DiscordWinForm
             if(txtUsername.Text != string.Empty && txtNickname.Text != string.Empty &&
                 txtPassword.Text != string.Empty && txtPictureURL.Text != string.Empty)
             {
-                SqlCommand sqlCommand = Connection.sqlConnection.CreateCommand();
-                sqlCommand.CommandText = $"AddUser({txtUsername.Text}, {txtNickname.Text}, {txtPassword.Text}, {txtPictureURL});";
+                UserHelper.AddUser(txtUsername.Text, txtNickname.Text, txtPassword.Text, txtPictureURL.Text);
                 FormHelper.RunForm(new AuthorizationForm(), this);
             }
-            MessageBox.Show("Some field is empty!");
+            else MessageBox.Show("Some field is empty!");
         }
     }
 }
