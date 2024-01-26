@@ -27,7 +27,7 @@ namespace DiscordWinForm
             if(txtUsername.Text != string.Empty && txtNickname.Text != string.Empty &&
                 txtPassword.Text != string.Empty && txtPictureURL.Text != string.Empty)
             {
-                UserHelper.AddUser(txtUsername.Text, txtNickname.Text, txtPassword.Text, txtPictureURL.Text);
+                UserDbHelper.AddUser(txtUsername.Text, txtNickname.Text, txtPassword.Text, txtPictureURL.Text, User.GetIP());
                 FormHelper.RunForm(new AuthorizationForm(), this);
             }
             else MessageBox.Show("Some field is empty!");

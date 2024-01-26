@@ -14,11 +14,11 @@ namespace DiscordWinForm.Helpers
         public string MSSQLServerConnection { get; set; }
     }
 
-    static class Connection
+    static class SqlConnection
     {
-        public static readonly SqlConnection sqlConnection;
+        public static readonly System.Data.SqlClient.SqlConnection sqlConnection;
 
-        static Connection()
+        static SqlConnection()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -26,7 +26,7 @@ namespace DiscordWinForm.Helpers
 
             IConfiguration configuration = builder.Build();
 
-            sqlConnection = new SqlConnection(configuration.GetConnectionString("MSSQLServerConnection") ?? "Data Source=.;Integrated Security=True;"); // + $" Initial Catalog=DiscordDb;");
+            sqlConnection = new System.Data.SqlClient.SqlConnection(configuration.GetConnectionString("MSSQLServerConnection") ?? "Data Source=.;Integrated Security=True;"); // + $" Initial Catalog=DiscordDb;");
             sqlConnection.Open();
 
             SqlCommand sql = sqlConnection.CreateCommand();

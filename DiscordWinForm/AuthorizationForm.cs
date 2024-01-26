@@ -14,17 +14,17 @@ namespace DiscordWinForm
 {
     public partial class AuthorizationForm : Form
     {
-        private UserHelper UserHelper;
+        private UserDbHelper UserHelper;
 
         public AuthorizationForm()
         {
-            UserHelper = new UserHelper();
+            UserHelper = new UserDbHelper();
             InitializeComponent();
         }
 
         public AuthorizationForm(UserAuthorizationHelper uah)
         {
-            UserHelper = new UserHelper();
+            UserHelper = new UserDbHelper();
             InitializeComponent();
             txtUsername.Text = uah.Username;
             txtPassword.Text = uah.Password;
@@ -35,6 +35,7 @@ namespace DiscordWinForm
             if (txtUsername.Text != string.Empty && txtPassword.Text != string.Empty)
             {
                 User user = UserHelper.GetUser(txtUsername.Text, txtPassword.Text);
+                UserDbHelper.GetFriends(ref user);
                 if (user != null)
                 {
                     if (chkRememberMe.Checked)
@@ -43,7 +44,7 @@ namespace DiscordWinForm
                         af.Serialize();
                     }
 
-                    //допиши сюда передачу user в основну форму
+                    FormHelper.RunForm(new TestForm(user), this);
 
 
                 }
