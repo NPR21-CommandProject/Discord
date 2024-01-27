@@ -23,7 +23,8 @@ namespace DiscordWinForm.Helpers
         {
             Recorder = new WaveInEvent();
             Recorder.WaveFormat = new WaveFormat(20000, 16, 1);
-            RecordSize = Recorder.WaveFormat.AverageBytesPerSecond / 4;
+            RecordSize = Recorder.WaveFormat.AverageBytesPerSecond;
+            Recorder.BufferMilliseconds = 1000;
             Recorder.DataAvailable += (object sender, WaveInEventArgs e) =>
                 Buffer.BlockCopy(e.Buffer, 0, AudioBuffer, 0, e.BytesRecorded); ;
         }
@@ -37,20 +38,31 @@ namespace DiscordWinForm.Helpers
             Recorder.StopRecording();
         }
 
-        static public async Task RunAudioMessageAsync(NetworkStream message )
+        static public async Task RunAudioMessageAsync(NetworkStream message)
         {
             WaveOutEvent player = new WaveOutEvent();
             player.Init(ConvertToRawSourceWaveStream(message));
+            player.Volume = 3;
             player.Play();
-        } 
+            while(player.PlaybackState == PlaybackState.Playing) { Thread.Sleep(1000); }
+        }
 
         static public RawSourceWaveStream ConvertToRawSourceWaveStream(NetworkStream data)
         {
-            byte[] buffer = new byte[data.Length];
-            data.ReadAsync(buffer, 0, buffer.Length);
-            using(MemoryStream ms = new MemoryStream(buffer)) {
-                RawSourceWaveStream raw = new RawSourceWaveStream(ms, Recorder.WaveFormat);
-                return raw;
+            try
+            {
+                byte[] buffer = new byte[RecordSize];
+                data.Read(buffer, 0, buffer.Length);
+                using (MemoryStream ms = new MemoryStream(buffer))
+                {
+                    RawSourceWaveStream raw = new RawSourceWaveStream(ms, Recorder.WaveFormat);
+                    return raw;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return null;
             }
         }
     }

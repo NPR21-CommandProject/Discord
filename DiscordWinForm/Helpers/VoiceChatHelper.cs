@@ -17,46 +17,67 @@ namespace DiscordWinForm.Helpers
         private static ushort port = 57119;
         private static volatile bool AudioChatClosed;
 
-        public static async Task StartVoiceChat(User user) {
-            AudioChatClosed = false;
-            userEndPoint = new IPEndPoint(IPAddress.Parse(user.IP), port);
-            sockets = new List<Socket>();
-            tcpListener = new TcpListener(userEndPoint);
-
-            for(int i = 0; i < user.Friends.Count; i++)
+        public static async Task StartVoiceChat(User user)
+        {
+            try
             {
-                if (user.Friends[i].state == State.InVoiceChat)
+                AudioChatClosed = false;
+                userEndPoint = new IPEndPoint(IPAddress.Parse(user.IP), port);
+                sockets = new List<Socket>();
+                tcpListener = new TcpListener(userEndPoint);
+
+                for (int i = 0; i < user.Friends.Count; i++)
                 {
-                    Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                    socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                    socket.Connect(user.Friends[i].AudioEndPoint);
-                    sockets.Add(socket);
+                        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                        socket.Connect(user.Friends[i].AudioEndPoint);
+                        sockets.Add(socket);
                 }
+
+                tcpListener.Start();
+                Task.Run(() => StartSendingAudioAsync());
+                Task.Run(() => StartReceivingAudioAsync());
             }
-            
-            tcpListener.Start();
-            Task.Run(() =>StartSendingAudioAsync());
-            Task.Run(() => StartReceivingAudioAsync());
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private static async Task StartReceivingAudioAsync()
         {
-            while (true)
+            try
             {
-                TcpClient client = tcpListener.AcceptTcpClient();
-                Task.Run(() => AudioHelper.RunAudioMessageAsync(client.GetStream()));
-                if (AudioChatClosed) break;
-            } tcpListener.Stop();
+                while (true)
+                {
+                    TcpClient client = tcpListener.AcceptTcpClient();
+                    Task.Run(() => AudioHelper.RunAudioMessageAsync(client.GetStream()));
+                    if (AudioChatClosed) break;
+                }
+                tcpListener.Stop();
+            }
+            catch(Exception e)
+            { 
+                MessageBox.Show(e.Message);
+            }
         }
 
         private static async Task StartSendingAudioAsync()
         {
-            while (true)
+            try
             {
-                AudioHelper.Record(20);
-                foreach (Socket socket in sockets) Task.Run(() => socket.SendAsync(AudioHelper.AudioBuffer));
-                if (AudioChatClosed) return;
+                while (true)
+                {
+                    AudioHelper.Record(1000);
+                    foreach (Socket socket in sockets) socket.Send(AudioHelper.AudioBuffer);
+                    if (AudioChatClosed) return;
+                }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
         }
 
         private static void StopChat()

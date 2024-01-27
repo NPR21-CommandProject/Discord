@@ -28,7 +28,7 @@ namespace DiscordWinForm.Helpers
         {
             while (true)
             {
-                for(int i =  0; i < user.Friends.Count; i++)
+                for (int i = 0; i < user.Friends.Count; i++)
                 {
                     socket.Connect(user.Friends[i].StateEndPoint);
                     byte[] buffer = new byte[2];
@@ -38,7 +38,7 @@ namespace DiscordWinForm.Helpers
                 }
                 Thread.Sleep(1000);
             }
-            
+
         }
 
         public static async Task MonitorFriendsStates(User user)
@@ -51,15 +51,16 @@ namespace DiscordWinForm.Helpers
                 if (client.Connected)
                 {
                     byte[] buffer = new byte[2];
-                    for(int i = 0; i < user.Friends.Count; i++)
+                    for (int i = 0; i < user.Friends.Count; i++)
                     {
                         if (user.Friends[i].StateEndPoint == client.Client.RemoteEndPoint)
                         {
-                            client.GetStream().Read(buffer , 0, buffer.Length);
+                            client.GetStream().Read(buffer, 0, buffer.Length);
                             user.Friends[i].state = (State)BitConverter.ToInt16(buffer);
                         }
                     }
-                } Thread.Sleep(1000);
+                }
+                Thread.Sleep(1000);
             }
         }
     }
