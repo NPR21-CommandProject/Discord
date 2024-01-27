@@ -18,23 +18,28 @@ namespace DiscordWinForm.Helpers
         static private WaveInEvent Recorder;
         static public byte[] AudioBuffer;
         static int RecordSize;
+        static ushort timeOfRecording;
 
         static AudioHelper()
         {
             Recorder = new WaveInEvent();
-            Recorder.WaveFormat = new WaveFormat(20000, 16, 1);
-            RecordSize = Recorder.WaveFormat.AverageBytesPerSecond;
-            Recorder.BufferMilliseconds = 1000;
+            Recorder.WaveFormat = new WaveFormat(44100, 16, 1);
             Recorder.DataAvailable += (object sender, WaveInEventArgs e) =>
-                Buffer.BlockCopy(e.Buffer, 0, AudioBuffer, 0, e.BytesRecorded); ;
+                Buffer.BlockCopy(e.Buffer, 0, AudioBuffer, 0, e.BytesRecorded);
+            ChangeTimings(500);
         }
 
 
-        static public void Record(ushort TimeOfRecordingMilliseconds)
+        static public async Task Record(ushort TimeOfRecordingMilliseconds = 0)
         {
+            if(TimeOfRecordingMilliseconds != 0 && TimeOfRecordingMilliseconds != timeOfRecording)
+            {
+                ChangeTimings(TimeOfRecordingMilliseconds);
+            }
+            
             AudioBuffer = new byte[RecordSize];
             Recorder.StartRecording();
-            Thread.Sleep(TimeOfRecordingMilliseconds);
+            await Task.Delay(timeOfRecording);
             Recorder.StopRecording();
         }
 
@@ -42,28 +47,28 @@ namespace DiscordWinForm.Helpers
         {
             WaveOutEvent player = new WaveOutEvent();
             player.Init(ConvertToRawSourceWaveStream(message));
-            player.Volume = 3;
+            player.Volume = 1;
             player.Play();
-            while(player.PlaybackState == PlaybackState.Playing) { Thread.Sleep(1000); }
+            while(player.PlaybackState == PlaybackState.Playing) { await Task.Delay(timeOfRecording); }
+        }
+
+        public static void ChangeTimings(ushort TimeOfRecordingMilliseconds)
+        {
+            if (TimeOfRecordingMilliseconds != timeOfRecording)
+            {
+                timeOfRecording = TimeOfRecordingMilliseconds;
+                Recorder.BufferMilliseconds = timeOfRecording;
+                RecordSize = Recorder.WaveFormat.AverageBytesPerSecond * 1;
+            }
+             
         }
 
         static public RawSourceWaveStream ConvertToRawSourceWaveStream(NetworkStream data)
         {
-            try
-            {
-                byte[] buffer = new byte[RecordSize];
-                data.Read(buffer, 0, buffer.Length);
-                using (MemoryStream ms = new MemoryStream(buffer))
-                {
-                    RawSourceWaveStream raw = new RawSourceWaveStream(ms, Recorder.WaveFormat);
-                    return raw;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return null;
-            }
+            byte[] buffer = new byte[RecordSize];
+            data.Read(buffer, 0, buffer.Length);
+            RawSourceWaveStream raw = new RawSourceWaveStream(buffer, 0, buffer.Length, Recorder.WaveFormat);
+            return raw;
         }
     }
 }

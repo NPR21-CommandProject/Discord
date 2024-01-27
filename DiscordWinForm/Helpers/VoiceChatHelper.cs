@@ -26,17 +26,22 @@ namespace DiscordWinForm.Helpers
                 sockets = new List<Socket>();
                 tcpListener = new TcpListener(userEndPoint);
 
+                tcpListener.Start();
+                Task.Run(() => StartReceivingAudioAsync());
                 for (int i = 0; i < user.Friends.Count; i++)
                 {
-                        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    try
+                    {
+                        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                         socket.Connect(user.Friends[i].AudioEndPoint);
                         sockets.Add(socket);
+                    }
+                    catch(Exception ex)
+                    { ; }
                 }
-
-                tcpListener.Start();
+                        
                 Task.Run(() => StartSendingAudioAsync());
-                Task.Run(() => StartReceivingAudioAsync());
             }
             catch(Exception e)
             {
@@ -46,11 +51,12 @@ namespace DiscordWinForm.Helpers
 
         private static async Task StartReceivingAudioAsync()
         {
+            AudioHelper.ChangeTimings(1000);
             try
             {
+                TcpClient client = tcpListener.AcceptTcpClient();
                 while (true)
                 {
-                    TcpClient client = tcpListener.AcceptTcpClient();
                     Task.Run(() => AudioHelper.RunAudioMessageAsync(client.GetStream()));
                     if (AudioChatClosed) break;
                 }
@@ -68,8 +74,11 @@ namespace DiscordWinForm.Helpers
             {
                 while (true)
                 {
-                    AudioHelper.Record(1000);
-                    foreach (Socket socket in sockets) socket.Send(AudioHelper.AudioBuffer);
+                    await AudioHelper.Record(1000);
+                    for (int i = 0; i < sockets.Count; i++) {
+                        try { sockets[i].SendAsync(AudioHelper.AudioBuffer); }
+                        catch (Exception ex) {; }
+                    }
                     if (AudioChatClosed) return;
                 }
             }

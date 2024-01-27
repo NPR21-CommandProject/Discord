@@ -21,7 +21,7 @@ namespace DiscordWinForm.Helpers
             userEndPoint = new IPEndPoint(IPAddress.Parse(user.IP), port);
             tcpListener = new TcpListener(userEndPoint);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
         }
 
         public static async Task SendUserState(User user)
@@ -30,11 +30,15 @@ namespace DiscordWinForm.Helpers
             {
                 for (int i = 0; i < user.Friends.Count; i++)
                 {
-                    socket.Connect(user.Friends[i].StateEndPoint);
-                    byte[] buffer = new byte[2];
-                    buffer = BitConverter.GetBytes(((short)user.state));
-                    socket.Send(buffer);
-                    socket.Disconnect(true);
+                    try
+                    {
+                        socket.Connect(user.Friends[i].StateEndPoint);
+                        byte[] buffer = new byte[2];
+                        buffer = BitConverter.GetBytes(((short)user.state));
+                        socket.Send(buffer);
+                        socket.Disconnect(true);
+                    }
+                    catch (Exception ex) { socket.Disconnect(true); }
                 }
                 Thread.Sleep(1000);
             }
