@@ -31,8 +31,8 @@
             EmojiButton = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
-            button1 = new Button();
             btnOpenVoiceChat = new Button();
+            button1 = new Button();
             listBox1 = new ListBox();
             textBox1 = new TextBox();
             FileButton = new Button();
@@ -61,6 +61,20 @@
             panel1.Size = new Size(164, 452);
             panel1.TabIndex = 5;
             // 
+            // btnOpenVoiceChat
+            // 
+            btnOpenVoiceChat.BackColor = Color.FromArgb(54, 57, 69);
+            btnOpenVoiceChat.BackgroundImageLayout = ImageLayout.None;
+            btnOpenVoiceChat.FlatStyle = FlatStyle.Popup;
+            btnOpenVoiceChat.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnOpenVoiceChat.ForeColor = Color.Snow;
+            btnOpenVoiceChat.Location = new Point(12, 32);
+            btnOpenVoiceChat.Name = "btnOpenVoiceChat";
+            btnOpenVoiceChat.Size = new Size(136, 23);
+            btnOpenVoiceChat.TabIndex = 6;
+            btnOpenVoiceChat.Text = "Join voice chat";
+            btnOpenVoiceChat.UseVisualStyleBackColor = false;
+            // 
             // button1
             // 
             button1.BackColor = Color.FromArgb(153, 170, 181);
@@ -73,20 +87,6 @@
             button1.TabIndex = 4;
             button1.Text = "Send";
             button1.UseVisualStyleBackColor = false;
-            // 
-            // btnOpenVoiceChat
-            // 
-            btnOpenVoiceChat.BackColor = Color.FromArgb(54, 57, 69);
-            btnOpenVoiceChat.BackgroundImageLayout = ImageLayout.None;
-            btnOpenVoiceChat.FlatStyle = FlatStyle.Popup;
-            btnOpenVoiceChat.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnOpenVoiceChat.ForeColor = Color.Snow;
-            btnOpenVoiceChat.Location = new Point(12, 12);
-            btnOpenVoiceChat.Name = "btnOpenVoiceChat";
-            btnOpenVoiceChat.Size = new Size(136, 23);
-            btnOpenVoiceChat.TabIndex = 6;
-            btnOpenVoiceChat.Text = "Join voice chat";
-            btnOpenVoiceChat.UseVisualStyleBackColor = false;
             // 
             // listBox1
             // 
