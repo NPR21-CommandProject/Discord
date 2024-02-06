@@ -43,10 +43,10 @@ namespace DiscordWinForm.Helpers
             Recorder.StopRecording();
         }
 
-        static public async Task RunAudioMessageAsync(NetworkStream message)
+        static public async Task RunAudioMessageAsync(byte[] message)
         {
             WaveOutEvent player = new WaveOutEvent();
-            player.Init(ConvertToRawSourceWaveStream(message));
+            player.Init(new RawSourceWaveStream(message, 0, message.Length, Recorder.WaveFormat));
             player.Volume = 1;
             player.Play();
             while(player.PlaybackState == PlaybackState.Playing) { await Task.Delay(timeOfRecording); }

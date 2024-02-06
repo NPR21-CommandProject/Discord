@@ -16,12 +16,12 @@ namespace DiscordWinForm
 
         private void btnSignIn_Click(object sender, EventArgs e)
         {
-            FormHelper.RunForm(new AuthorizationForm(), this);
+            FormManager.RunForm(new AuthorizationForm(), this);
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            FormHelper.RunForm(new RegistrationForm(), this);
+            FormManager.RunForm(new RegistrationForm(), this);
         }
     }
 }

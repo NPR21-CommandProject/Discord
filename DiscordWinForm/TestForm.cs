@@ -12,32 +12,30 @@ using System.Net.Sockets;
 using System.Net;
 using System.Net.Http.Headers;
 using DiscordWinForm.Helpers;
+using DiscordWinForm.StartupManagers;
 
 namespace DiscordWinForm
 {
     public partial class TestForm : Form
     {
-        User user;
-        public TestForm(User user)
+        public TestForm()
         {
-            this.user = user;
             InitializeComponent();
         }
 
         private async void TestForm_Load(object sender, EventArgs e)
         {
-            user.state = State.InVoiceChat;
-            
-            Task configureFriends = ConfigureFriends();
-            Task.Run(() => VoiceChatHelper.StartVoiceChat(user));
+            NetworkStartupManager.StartNetworkCommunication();
 
+
+            Task.Run(() => ConfigureFriends());
         }
 
         async Task ConfigureFriends()
         {
-            FriendHelper.InitHelper(user);
-            Task.Run(() => FriendHelper.MonitorFriendsStates(user));
-            Task.Run(() => FriendHelper.SendUserState(user));
+            //FriendHelper.InitHelper(user);
+            //Task.Run(() => FriendHelper.MonitorFriendsStates(user));
+            //Task.Run(() => FriendHelper.SendUserState(user));
             return;
         }
     }

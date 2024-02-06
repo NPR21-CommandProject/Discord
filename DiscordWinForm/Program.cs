@@ -1,8 +1,17 @@
-using DiscordWinForm.Helpers;
 using System.Data.SqlClient;
+using System.Net.Sockets;
+using System.Net;
+using DiscordWinForm.StartupManagers;
 
 namespace DiscordWinForm
 {
+    public enum RequestType
+    {
+        AddClient,
+        AudioConnectWith,
+        SendTextMessage
+    }
+
     internal static class Program
     {
         /// <summary>
@@ -11,6 +20,7 @@ namespace DiscordWinForm
         [STAThread]
         static void Main()
         {
+
             // To customize application configuration such as set high DPI settings or default font,
             //SqlCommand sql = Connection.sqlConnection.CreateCommand();
             //sql.CommandText = "Create Database DiscordDb";
@@ -25,7 +35,12 @@ namespace DiscordWinForm
             //sql.ExecuteNonQuery();
             //sql.CommandText = "CREATE FUNCTION GetUser(@Username nvarchar(256), @Password nvarchar(256))\r\nRETURNS TABLE AS\r\n\tRETURN SELECT ID, Username, Nickname, [Password], Picture FROM tblUsers\r\n\tWHERE Username = @Username and Password = @Password;";
 
-            UserAuthorizationHelper uah = new UserAuthorizationHelper();
+
+
+
+
+
+            AuthorizationManager uah = new AuthorizationManager();
             if(uah.Deserialize()) {
                 Application.Run(new AuthorizationForm(uah));
             }

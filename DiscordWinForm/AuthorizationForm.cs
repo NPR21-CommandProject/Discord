@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DiscordWinForm.Entities;
 using DiscordWinForm.Helpers;
+using DiscordWinForm.StartupManagers;
+using DiscordWinForm.StartupManagers.DatabaseManagers;
 
 namespace DiscordWinForm
 {
@@ -22,7 +24,7 @@ namespace DiscordWinForm
             InitializeComponent();
         }
 
-        public AuthorizationForm(UserAuthorizationHelper uah)
+        public AuthorizationForm(AuthorizationManager uah)
         {
             UserHelper = new UserDbHelper();
             InitializeComponent();
@@ -34,21 +36,15 @@ namespace DiscordWinForm
         {
             if (txtUsername.Text != string.Empty && txtPassword.Text != string.Empty)
             {
-                User user = UserHelper.GetUser(txtUsername.Text, txtPassword.Text);
-                UserDbHelper.GetFriends(ref user);
-                if (user != null)
+                UserHelper.InitUser(txtUsername.Text, txtPassword.Text);
+                UserDbHelper.GetFriends();
+                if (chkRememberMe.Checked)
                 {
-                    if (chkRememberMe.Checked)
-                    {
-                        UserAuthorizationHelper af = new UserAuthorizationHelper(txtUsername.Text, txtPassword.Text);
-                        af.Serialize();
-                    }
-
-                    FormHelper.RunForm(new TestForm(user), this);
-
-
+                    AuthorizationManager af = new AuthorizationManager(txtUsername.Text, txtPassword.Text);
+                    af.Serialize();
                 }
-                else MessageBox.Show("There is no such user");
+
+                FormManager.RunForm(new TestForm(), this);;
             }
             else MessageBox.Show("You haven't entered username or password");
         }

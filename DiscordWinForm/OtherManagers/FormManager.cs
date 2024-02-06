@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace DiscordWinForm.Helpers
 {
-    public static class FormHelper
+    public static class FormManager
     {
         /// <summary>
         /// Make new thread for formToRun and then close the formToClose in previous thread

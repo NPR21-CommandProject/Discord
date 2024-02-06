@@ -6,36 +6,37 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
-namespace DiscordWinForm.Helpers
+namespace DiscordWinForm.StartupManagers
 {
-    public class UserAuthorizationHelper
+    public class AuthorizationManager
     {
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public UserAuthorizationHelper(string username, string password) {
+        public AuthorizationManager(string username, string password)
+        {
             Username = username;
             Password = password;
         }
 
-        public UserAuthorizationHelper() { }
+        public AuthorizationManager() { }
 
         public void Serialize()
         {
             File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "appUserInfo.json"), JsonSerializer.Serialize(this));
         }
-    
+
         public bool Deserialize()
         {
             string text = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "appUserInfo.json"));
             if (text != string.Empty)
             {
-                UserAuthorizationHelper user = JsonSerializer.Deserialize<UserAuthorizationHelper>(text);
+                AuthorizationManager user = JsonSerializer.Deserialize<AuthorizationManager>(text);
                 Username = user.Username;
                 Password = user.Password;
                 return Username != string.Empty && Password != string.Empty;
             }
-            return false;        
+            return false;
         }
     }
 

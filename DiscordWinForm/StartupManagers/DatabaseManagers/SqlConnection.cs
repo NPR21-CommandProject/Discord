@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace DiscordWinForm.Helpers
+namespace DiscordWinForm.StartupManagers.DatabaseManagers
 {
     public class ConnectionStrings
     {
@@ -34,6 +34,6 @@ namespace DiscordWinForm.Helpers
             sql.ExecuteNonQuery();
         }
 
-        
+
     }
 }

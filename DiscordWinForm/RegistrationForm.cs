@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DiscordWinForm.Entities;
 using DiscordWinForm.Helpers;
+using DiscordWinForm.StartupManagers.DatabaseManagers;
 
 namespace DiscordWinForm
 {
-    
+
 
     public partial class RegistrationForm : Form
     {
@@ -27,8 +28,8 @@ namespace DiscordWinForm
             if(txtUsername.Text != string.Empty && txtNickname.Text != string.Empty &&
                 txtPassword.Text != string.Empty && txtPictureURL.Text != string.Empty)
             {
-                UserDbHelper.AddUser(txtUsername.Text, txtNickname.Text, txtPassword.Text, txtPictureURL.Text, User.GetIP());
-                FormHelper.RunForm(new AuthorizationForm(), this);
+                UserDbHelper.AddUser(txtUsername.Text, txtNickname.Text, txtPassword.Text, txtPictureURL.Text, "127.0.0.1");
+                FormManager.RunForm(new AuthorizationForm(), this);
             }
             else MessageBox.Show("Some field is empty!");
         }
