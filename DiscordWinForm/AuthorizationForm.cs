@@ -44,7 +44,8 @@ namespace DiscordWinForm
                     af.Serialize();
                 }
 
-                FormManager.RunForm(new TestForm(), this);;
+                NetworkStartupManager.StartNetworkCommunication();
+                //FormManager.RunForm(new ChatForm(), this);;
             }
             else MessageBox.Show("You haven't entered username or password");
         }

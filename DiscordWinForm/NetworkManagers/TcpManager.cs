@@ -14,17 +14,21 @@ namespace DiscordWinForm.NetworkManagers
     public static class TcpManager
     {
         private static byte[] _requestInfo;
-        private static int _port = 5518;
-        public static Socket _socket;
+        private static int _serverPort = 5518;
+        private static int _clientPort = 5517;
+        public static Socket _sendingSocket;
 
         static TcpManager()
         {
-            IPAddress serverIP = GetIP();                                          //Set server IP!!!!!!!
-            IPEndPoint serverIPEndPoint = new IPEndPoint(serverIP, _port);                                           
-            
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-            _socket.Connect(serverIPEndPoint);
+            Console.WriteLine(Dns.GetHostAddresses(Dns.GetHostName())[0]);
+            IPAddress serverIP = IPAddress.Parse("15.188.224.187");                                          //Set server IP!!!!!!!
+            IPEndPoint serverIPEndPoint = new IPEndPoint(serverIP, _serverPort);
+            IPAddress clientIP = Dns.GetHostAddresses(Dns.GetHostName())[1];
+            IPEndPoint clientIPEndPoint = new IPEndPoint(clientIP, _serverPort);
+            _sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _sendingSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            _sendingSocket.Bind(clientIPEndPoint);
+            _sendingSocket.Connect(serverIPEndPoint);
 
             _requestInfo = new byte[9];
             Array.Copy(BitConverter.GetBytes(User.ID), 0, _requestInfo, 1, 4);
@@ -40,26 +44,26 @@ namespace DiscordWinForm.NetworkManagers
         /// </summary>
         public static void StartListenThread()
         {
-            _socket.Listen();
-            Task.Run(() => { _socket.BeginAccept(Accept, null); });
+            _sendingSocket.Listen();
+            Task.Run(() => { _sendingSocket.BeginAccept(Accept, null); });
         }
 
         private static async void Accept(IAsyncResult res)  //Work in theory
         {
             try
             {
-                _socket.EndAccept(out byte[] buffer, res);
+                _sendingSocket.EndAccept(out byte[] buffer, res);
                 TextChatManager.SetMessage(buffer);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
-            finally { _socket.BeginAccept(Accept, null); }
+            finally { _sendingSocket.BeginAccept(Accept, null); }
         }
 
         public static async Task SendTextMessageAsync(string message, int recipientID)
         {
             try
             {
-                _socket.SendAsync(CreateSendRequest(message, recipientID), 0);
+                _sendingSocket.SendAsync(CreateSendRequest(message, recipientID), 0);
             }
             catch(Exception ex)
             {
@@ -85,7 +89,7 @@ namespace DiscordWinForm.NetworkManagers
         {
             
             try { 
-                _socket.Send(CreateNewClientRequest(), 0);
+                _sendingSocket.Send(CreateNewClientRequest(), 0);
             }
             catch(Exception ex)
             {
@@ -103,22 +107,5 @@ namespace DiscordWinForm.NetworkManagers
        
 
 
-
-
-
-
-
-
-        private static IPAddress GetIP()
-        {
-            IPHostEntry host;
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) return ip;
-            }
-            //return new WebClient().DownloadString("http://icanhazip.com").Replace("\\r\\n", "").Replace("\\n", "").Trim();
-            return null;
-        }
     }
 }

@@ -13,21 +13,10 @@ namespace DiscordWinForm.ChatManagers
     public static class TextChatManager
     {
         private static volatile string _message;
-        /// <summary>
-        /// Indicate whether new message was received
-        /// </summary>
-        public static bool _Available;
 
-        public static async Task SetMessage(byte[] buffer)
+        public static async void IncomingMessageEventHandler()
         {
-            _message = Encoding.BigEndianUnicode.GetString(buffer, 9, buffer.Length - 9);
-            _Available = true;
-        }
 
-        public static async Task<string> GetMessage()
-        {
-            _Available = false;
-            return _message;
         }
 
         public static async Task SendMessage(string message, int friendsID)
