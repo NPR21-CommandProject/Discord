@@ -23,7 +23,7 @@ namespace WinFormsApp1
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            TextChatManager.SendMessage(tbMessage.Text, 3);                     //Change ID!!!!
+            TextChatManager.SendMessage(tbMessage.Text, 2);                     //Change ID!!!!
         }
 
         private void NewMessageHandler(string message)
