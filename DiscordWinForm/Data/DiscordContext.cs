@@ -75,6 +75,31 @@ namespace DB.Data
                 SaveChanges();
             }
         }
+        public UserEntity GetUser(string username, string password)
+        {
+            UserEntity user = Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+
+            // Check if the user is found before returning
+            return user != null ? user : new UserEntity(); // Assuming UserEntity has a parameterless constructor
+        }
+        public List<User> GetTableOfFriends(int id)
+        {
+            var friends = from u in Users
+                          join f in Friends on id equals f.Friend1ID into tempFriends
+                          from friend in tempFriends.DefaultIfEmpty()
+                          where friend != null && friend.Friend2ID == id
+                          select new UserEntity
+                          {
+                              ID = u.ID,
+                              Username = u.Username,
+                              Nickname = u.Nickname,
+                              Password = u.Password,
+                              Picture = u.Picture,
+                              IP = u.IP
+                          };
+
+            return friends.Cast<User>().ToList();
+        }
 
         public void AddFriends(int friend1ID, int friend2ID)
         {
