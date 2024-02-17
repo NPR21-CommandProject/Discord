@@ -32,14 +32,14 @@
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
             label1 = new Label();
-            dgvFriendList = new DataGridView();
+            dgvFriendsList = new DataGridView();
             btnOpenVoiceChat = new Button();
             btnSend = new Button();
             lbMessages = new ListBox();
             tbMessage = new TextBox();
             FileButton = new Button();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvFriendList).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvFriendsList).BeginInit();
             SuspendLayout();
             // 
             // EmojiButton
@@ -59,7 +59,7 @@
             // 
             panel1.BackColor = Color.FromArgb(61, 64, 76);
             panel1.Controls.Add(label1);
-            panel1.Controls.Add(dgvFriendList);
+            panel1.Controls.Add(dgvFriendsList);
             panel1.Controls.Add(btnOpenVoiceChat);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
@@ -71,21 +71,22 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label1.ForeColor = SystemColors.Control;
-            label1.Location = new Point(12, 48);
+            label1.Location = new Point(46, 44);
             label1.Name = "label1";
             label1.Size = new Size(64, 18);
             label1.TabIndex = 10;
             label1.Text = "Friends";
+            label1.Click += label1_Click;
             // 
-            // dgvFriendList
+            // dgvFriendsList
             // 
-            dgvFriendList.BackgroundColor = Color.FromArgb(54, 57, 69);
-            dgvFriendList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvFriendList.Location = new Point(12, 69);
-            dgvFriendList.Name = "dgvFriendList";
-            dgvFriendList.Size = new Size(136, 369);
-            dgvFriendList.TabIndex = 10;
-            dgvFriendList.CellContentClick += dataGridView1_CellContentClick;
+            dgvFriendsList.BackgroundColor = Color.FromArgb(54, 57, 69);
+            dgvFriendsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvFriendsList.Location = new Point(12, 69);
+            dgvFriendsList.Name = "dgvFriendsList";
+            dgvFriendsList.Size = new Size(136, 369);
+            dgvFriendsList.TabIndex = 10;
+            dgvFriendsList.CellContentClick += dataGridView1_CellContentClick;
             // 
             // btnOpenVoiceChat
             // 
@@ -167,7 +168,7 @@
             Load += ChatForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvFriendList).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvFriendsList).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -182,6 +183,6 @@
         private TextBox tbMessage;
         private Button FileButton;
         private Label label1;
-        private DataGridView dgvFriendList;
+        private DataGridView dgvFriendsList;
     }
 }

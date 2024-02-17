@@ -36,7 +36,7 @@ namespace DiscordWinForm.NetworkManagers
             IPAddress clientIP = Dns.GetHostAddresses(Dns.GetHostName())[1];
             IPEndPoint clientIPEndPoint = new IPEndPoint(clientIP, _serverPort);
             _sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _sendingSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            _sendingSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             _sendingSocket.Bind(clientIPEndPoint);
         }
         /// <summary>
@@ -73,10 +73,10 @@ namespace DiscordWinForm.NetworkManagers
         {
             try
             {
-                MessageBox.Show($"Is socket connected : {_sendingSocket.Connected}");
+                //MessageBox.Show($"Is socket connected : {_sendingSocket.Connected}");
                 _sendingSocket.Send(CreateSendRequest(message, recipientID), 0);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -98,11 +98,12 @@ namespace DiscordWinForm.NetworkManagers
 
         public static void SendNewClientRequest()
         {
-            
-            try { 
+
+            try
+            {
                 _sendingSocket.Send(CreateNewClientRequest(), 0);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -115,7 +116,7 @@ namespace DiscordWinForm.NetworkManagers
             Array.Copy(_requestInfo, 0, request, 0, 5);
             return request;
         }
-       
+
 
 
     }
