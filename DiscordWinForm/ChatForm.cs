@@ -50,26 +50,6 @@ namespace WinFormsApp1
 
 
 
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            // Send message
-            TextChatManager.SendMessage(tbMessage.Text, 3); // Change ID!!!!
-        }
-
-        private void NewMessageHandler(string message)
-        {
-            if (lbMessages.InvokeRequired)
-            {
-                // If invoking is required, use invoke to add the message to the list box
-                lbMessages.Invoke(new Action(() => lbMessages.Items.Add(message)));
-            }
-            else
-            {
-                // Otherwise, add the message directly
-                lbMessages.Items.Add(message);
-            }
-        }
-
         private void lbMessages_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Handle list box selection change event

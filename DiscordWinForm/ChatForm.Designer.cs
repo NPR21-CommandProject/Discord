@@ -76,7 +76,6 @@
             label1.Size = new Size(64, 18);
             label1.TabIndex = 10;
             label1.Text = "Friends";
-            label1.Click += label1_Click;
             // 
             // dgvFriendsList
             // 
