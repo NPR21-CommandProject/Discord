@@ -51,7 +51,7 @@
             EmojiButton.Name = "EmojiButton";
             EmojiButton.Size = new Size(29, 23);
             EmojiButton.TabIndex = 2;
-            EmojiButton.Text = "😁";
+            EmojiButton.Text = ":)";
             EmojiButton.UseVisualStyleBackColor = false;
             EmojiButton.Click += EmojiButton_Click;
             // 
@@ -70,7 +70,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label1.ForeColor = SystemColors.Control;
+            label1.ForeColor = Color.White;
             label1.Location = new Point(46, 44);
             label1.Name = "label1";
             label1.Size = new Size(64, 18);
@@ -94,7 +94,7 @@
             btnOpenVoiceChat.BackgroundImageLayout = ImageLayout.None;
             btnOpenVoiceChat.FlatStyle = FlatStyle.Popup;
             btnOpenVoiceChat.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnOpenVoiceChat.ForeColor = Color.Snow;
+            btnOpenVoiceChat.ForeColor = Color.White;
             btnOpenVoiceChat.Location = new Point(12, 12);
             btnOpenVoiceChat.Name = "btnOpenVoiceChat";
             btnOpenVoiceChat.Size = new Size(136, 23);
@@ -121,7 +121,7 @@
             lbMessages.BackColor = Color.FromArgb(54, 57, 69);
             lbMessages.BorderStyle = BorderStyle.None;
             lbMessages.Font = new Font("Microsoft Sans Serif", 16F);
-            lbMessages.ForeColor = SystemColors.Window;
+            lbMessages.ForeColor = Color.White;
             lbMessages.FormattingEnabled = true;
             lbMessages.ItemHeight = 25;
             lbMessages.Location = new Point(170, 10);
@@ -134,21 +134,23 @@
             // 
             tbMessage.BackColor = Color.FromArgb(64, 67, 79);
             tbMessage.BorderStyle = BorderStyle.FixedSingle;
+            tbMessage.Font = new Font("Microsoft Sans Serif", 9F);
+            tbMessage.ForeColor = Color.White;
             tbMessage.Location = new Point(205, 415);
             tbMessage.Name = "tbMessage";
-            tbMessage.Size = new Size(490, 23);
+            tbMessage.Size = new Size(490, 21);
             tbMessage.TabIndex = 8;
             // 
             // FileButton
             // 
             FileButton.BackColor = Color.FromArgb(153, 170, 181);
             FileButton.FlatStyle = FlatStyle.Popup;
-            FileButton.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            FileButton.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FileButton.Location = new Point(170, 416);
             FileButton.Name = "FileButton";
             FileButton.Size = new Size(29, 23);
             FileButton.TabIndex = 9;
-            FileButton.Text = "📌";
+            FileButton.Text = "File";
             FileButton.UseVisualStyleBackColor = false;
             // 
             // ChatForm

@@ -22,7 +22,7 @@ namespace DiscordWinForm.NetworkManagers
 
         static TcpManager()
         {
-            IPAddress serverIP = IPAddress.Parse("15.188.224.187");                                          //Set server IP!!!!!!!
+            IPAddress serverIP = IPAddress.Parse("15.188.224.187");                                          //Set server IP!!!!!!! No
             _serverIPEndPoint = new IPEndPoint(serverIP, _serverPort);
             InitSendingSocket();
             _sendingSocket.Connect(_serverIPEndPoint);
