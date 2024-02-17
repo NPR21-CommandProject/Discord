@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,23 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DB.Data.Entities
+namespace DiscordWinForm.Data.Entities
 {
     [Table("tblUsers")]
     public class UserEntity
     {
         [Key]
-        public int Id { get; set; }
-        [Required, StringLength(200)]
-        public string Email { get; set; }
-        [Required, StringLength(20)]
+        public int ID { get; set; }
+
+        [Required, StringLength(256)]
+        public string Username { get; set; }
+
+        [Required, StringLength(128)]
+        public string Nickname { get; set; }
+
+        [Required, StringLength(256), RegularExpression(@"^(?=.*[0-9])(?=.*[A-Za-z]).{8,}$")]
         public string Password { get; set; }
-        public string Phone { get; set; }
-        [Required, StringLength(255)]
-        public string FirstName { get; set; }
-        [Required, StringLength(200)]
-        public string LastName { get; set; }
-        [Required, StringLength(20)]
-        public DateTime DateCreated { get; set; }
+
+        [StringLength(2048)]
+        public string Picture { get; set; }
+
+        [Required, StringLength(128)]
+        public string IP { get; set; }
     }
+
 }

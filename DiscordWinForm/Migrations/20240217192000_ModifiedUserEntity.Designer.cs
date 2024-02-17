@@ -3,6 +3,7 @@ using DB.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Migrations
 {
     [DbContext(typeof(DiscordContext))]
-    partial class DiscordContextModelSnapshot : ModelSnapshot
+    [Migration("20240217192000_ModifiedUserEntity")]
+    partial class ModifiedUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,7 @@ namespace DB.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DiscordWinForm.Data.Entities.FriendEntity", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Friend1ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Friend2ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("Friend1ID");
-
-                    b.HasIndex("Friend2ID");
-
-                    b.ToTable("tblFriends");
-                });
-
-            modelBuilder.Entity("DiscordWinForm.Data.Entities.UserEntity", b =>
+            modelBuilder.Entity("DB.Data.Entities.UserEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -83,25 +63,6 @@ namespace DB.Migrations
                         .IsUnique();
 
                     b.ToTable("tblUsers");
-                });
-
-            modelBuilder.Entity("DiscordWinForm.Data.Entities.FriendEntity", b =>
-                {
-                    b.HasOne("DiscordWinForm.Data.Entities.UserEntity", "Friend1")
-                        .WithMany()
-                        .HasForeignKey("Friend1ID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DiscordWinForm.Data.Entities.UserEntity", "Friend2")
-                        .WithMany()
-                        .HasForeignKey("Friend2ID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Friend1");
-
-                    b.Navigation("Friend2");
                 });
 #pragma warning restore 612, 618
         }
