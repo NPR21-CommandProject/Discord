@@ -68,7 +68,7 @@
             btnOpenVoiceChat.FlatStyle = FlatStyle.Popup;
             btnOpenVoiceChat.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             btnOpenVoiceChat.ForeColor = Color.Snow;
-            btnOpenVoiceChat.Location = new Point(12, 12);
+            btnOpenVoiceChat.Location = new Point(12, 32);
             btnOpenVoiceChat.Name = "btnOpenVoiceChat";
             btnOpenVoiceChat.Size = new Size(136, 23);
             btnOpenVoiceChat.TabIndex = 6;
