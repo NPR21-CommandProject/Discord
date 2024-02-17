@@ -31,12 +31,15 @@
             EmojiButton = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1 = new Panel();
+            label1 = new Label();
+            dgvFriendList = new DataGridView();
             btnOpenVoiceChat = new Button();
-            button1 = new Button();
-            listBox1 = new ListBox();
-            textBox1 = new TextBox();
+            btnSend = new Button();
+            lbMessages = new ListBox();
+            tbMessage = new TextBox();
             FileButton = new Button();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFriendList).BeginInit();
             SuspendLayout();
             // 
             // EmojiButton
@@ -55,11 +58,34 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(61, 64, 76);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(dgvFriendList);
             panel1.Controls.Add(btnOpenVoiceChat);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(164, 452);
             panel1.TabIndex = 5;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label1.ForeColor = SystemColors.Control;
+            label1.Location = new Point(12, 48);
+            label1.Name = "label1";
+            label1.Size = new Size(64, 18);
+            label1.TabIndex = 10;
+            label1.Text = "Friends";
+            // 
+            // dgvFriendList
+            // 
+            dgvFriendList.BackgroundColor = Color.FromArgb(54, 57, 69);
+            dgvFriendList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvFriendList.Location = new Point(12, 69);
+            dgvFriendList.Name = "dgvFriendList";
+            dgvFriendList.Size = new Size(136, 369);
+            dgvFriendList.TabIndex = 10;
+            dgvFriendList.CellContentClick += dataGridView1_CellContentClick;
             // 
             // btnOpenVoiceChat
             // 
@@ -75,40 +101,42 @@
             btnOpenVoiceChat.Text = "Join voice chat";
             btnOpenVoiceChat.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btnSend
             // 
-            button1.BackColor = Color.FromArgb(153, 170, 181);
-            button1.BackgroundImageLayout = ImageLayout.None;
-            button1.FlatStyle = FlatStyle.Popup;
-            button1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            button1.Location = new Point(701, 416);
-            button1.Name = "button1";
-            button1.Size = new Size(52, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Send";
-            button1.UseVisualStyleBackColor = false;
+            btnSend.BackColor = Color.FromArgb(153, 170, 181);
+            btnSend.BackgroundImageLayout = ImageLayout.None;
+            btnSend.FlatStyle = FlatStyle.Popup;
+            btnSend.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnSend.Location = new Point(701, 416);
+            btnSend.Name = "btnSend";
+            btnSend.Size = new Size(52, 23);
+            btnSend.TabIndex = 4;
+            btnSend.Text = "Send";
+            btnSend.UseVisualStyleBackColor = false;
+            btnSend.Click += btnSend_Click;
             // 
-            // listBox1
+            // lbMessages
             // 
-            listBox1.BackColor = Color.FromArgb(54, 57, 69);
-            listBox1.BorderStyle = BorderStyle.None;
-            listBox1.Font = new Font("Microsoft Sans Serif", 16F);
-            listBox1.ForeColor = SystemColors.Window;
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 25;
-            listBox1.Location = new Point(170, 10);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(618, 400);
-            listBox1.TabIndex = 7;
+            lbMessages.BackColor = Color.FromArgb(54, 57, 69);
+            lbMessages.BorderStyle = BorderStyle.None;
+            lbMessages.Font = new Font("Microsoft Sans Serif", 16F);
+            lbMessages.ForeColor = SystemColors.Window;
+            lbMessages.FormattingEnabled = true;
+            lbMessages.ItemHeight = 25;
+            lbMessages.Location = new Point(170, 10);
+            lbMessages.Name = "lbMessages";
+            lbMessages.Size = new Size(618, 400);
+            lbMessages.TabIndex = 7;
+            lbMessages.SelectedIndexChanged += lbMessages_SelectedIndexChanged;
             // 
-            // textBox1
+            // tbMessage
             // 
-            textBox1.BackColor = Color.FromArgb(64, 67, 79);
-            textBox1.BorderStyle = BorderStyle.FixedSingle;
-            textBox1.Location = new Point(205, 415);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(490, 23);
-            textBox1.TabIndex = 8;
+            tbMessage.BackColor = Color.FromArgb(64, 67, 79);
+            tbMessage.BorderStyle = BorderStyle.FixedSingle;
+            tbMessage.Location = new Point(205, 415);
+            tbMessage.Name = "tbMessage";
+            tbMessage.Size = new Size(490, 23);
+            tbMessage.TabIndex = 8;
             // 
             // FileButton
             // 
@@ -129,15 +157,17 @@
             BackColor = Color.FromArgb(54, 57, 69);
             ClientSize = new Size(800, 450);
             Controls.Add(FileButton);
-            Controls.Add(textBox1);
-            Controls.Add(listBox1);
+            Controls.Add(tbMessage);
+            Controls.Add(lbMessages);
             Controls.Add(panel1);
-            Controls.Add(button1);
+            Controls.Add(btnSend);
             Controls.Add(EmojiButton);
             Name = "ChatForm";
             Text = "Form1";
             Load += ChatForm_Load;
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFriendList).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -146,10 +176,12 @@
         private Button EmojiButton;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private Panel panel1;
-        private Button button1;
+        private Button btnSend;
         private Button btnOpenVoiceChat;
-        private ListBox listBox1;
-        private TextBox textBox1;
+        private ListBox lbMessages;
+        private TextBox tbMessage;
         private Button FileButton;
+        private Label label1;
+        private DataGridView dgvFriendList;
     }
 }
