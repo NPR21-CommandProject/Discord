@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +30,9 @@ namespace DiscordWinForm.Data.Entities
 
         [Required, StringLength(128)]
         public string IP { get; set; }
+
     }
+
+    
 
 }

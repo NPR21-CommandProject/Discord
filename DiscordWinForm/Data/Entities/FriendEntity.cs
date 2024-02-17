@@ -23,4 +23,6 @@ namespace DiscordWinForm.Data.Entities
         public virtual UserEntity Friend1 { get; set; }
         public virtual UserEntity Friend2 { get; set; }
     }
+
+    
 }

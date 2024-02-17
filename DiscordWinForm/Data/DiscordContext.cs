@@ -1,7 +1,9 @@
-﻿using DiscordWinForm.Data.Entities;
+﻿using DiscordWinForm.Data;
+using DiscordWinForm.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +46,44 @@ namespace DB.Data
                 .WithMany()
                 .HasForeignKey(f => f.Friend2ID)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<FriendEntity>()
+        .HasKey(f => new { f.Friend1ID, f.Friend2ID });
+        }
+
+        public void AddUser(string username, string nickname, string password, string picture, string ip)
+        {
+            var user = new UserEntity
+            {
+                Username = username,
+                Nickname = nickname,
+                Password = password,
+                Picture = picture,
+                IP = ip
+            };
+
+            Users.Add(user);
+            SaveChanges();
+        }
+
+        public void UpdateIp(string username, string password, string newIp)
+        {
+            var user = Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+
+            if (user != null)
+            {
+                user.IP = newIp;
+                SaveChanges();
+            }
+        }
+
+        public void AddFriends(int friend1ID, int friend2ID)
+        {
+            if (friend1ID != friend2ID)
+            {
+                var friend = new FriendEntity { Friend1ID = friend1ID, Friend2ID = friend2ID };
+                Friends.Add(friend);
+                SaveChanges();
+            }
         }
     }
 }
