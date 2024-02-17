@@ -99,7 +99,7 @@ namespace DiscordWinForm.NetworkManagers
 
         public static void SendNewClientRequest()
         {
-            
+
             try {
                 _sendingSocket.Send(CreateNewClientRequest(), 0);
             }
@@ -116,7 +116,7 @@ namespace DiscordWinForm.NetworkManagers
             Array.Copy(_requestInfo, 0, request, 0, 5);
             return request;
         }
-       
+
 
 
     }
