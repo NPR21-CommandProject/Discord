@@ -11,6 +11,7 @@ using DiscordWinForm.Entities;
 using DiscordWinForm.Helpers;
 using DiscordWinForm.StartupManagers;
 using DiscordWinForm.StartupManagers.DatabaseManagers;
+using WinFormsApp1;
 
 namespace DiscordWinForm
 {
@@ -44,8 +45,7 @@ namespace DiscordWinForm
                     af.Serialize();
                 }
 
-                NetworkStartupManager.StartNetworkCommunication();
-                //FormManager.RunForm(new ChatForm(), this);;
+                FormManager.RunForm(new ChatForm(), this);
             }
             else MessageBox.Show("You haven't entered username or password");
         }

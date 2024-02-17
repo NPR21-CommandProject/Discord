@@ -16,22 +16,39 @@ namespace DiscordWinForm.NetworkManagers
         private static byte[] _requestInfo;
         private static int _serverPort = 5518;
         private static int _clientPort = 5517;
-        public static Socket _sendingSocket;
+        private static IPEndPoint _serverIPEndPoint;
+        private static Socket _sendingSocket;
+        private static TcpListener _tcpListener;
 
         static TcpManager()
         {
-            Console.WriteLine(Dns.GetHostAddresses(Dns.GetHostName())[0]);
             IPAddress serverIP = IPAddress.Parse("15.188.224.187");                                          //Set server IP!!!!!!!
-            IPEndPoint serverIPEndPoint = new IPEndPoint(serverIP, _serverPort);
+            _serverIPEndPoint = new IPEndPoint(serverIP, _serverPort);
+            InitSendingSocket();
+            _sendingSocket.Connect(_serverIPEndPoint);
+
+            _requestInfo = new byte[9];
+            Array.Copy(BitConverter.GetBytes(User.ID), 0, _requestInfo, 1, 4);
+        }
+
+        private static void InitSendingSocket()
+        {
             IPAddress clientIP = Dns.GetHostAddresses(Dns.GetHostName())[1];
             IPEndPoint clientIPEndPoint = new IPEndPoint(clientIP, _serverPort);
             _sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _sendingSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
             _sendingSocket.Bind(clientIPEndPoint);
-            _sendingSocket.Connect(serverIPEndPoint);
-
-            _requestInfo = new byte[9];
-            Array.Copy(BitConverter.GetBytes(User.ID), 0, _requestInfo, 1, 4);
+        }
+        /// <summary>
+        /// Initialize of _tcpListener and start of listening for incoming messages
+        /// </summary>
+        public static async void InitTcpListener()
+        {
+            IPAddress clientIP = Dns.GetHostAddresses(Dns.GetHostName())[1];
+            IPEndPoint clientIPEndPoint = new IPEndPoint(clientIP, _clientPort);
+            _tcpListener = new TcpListener(clientIPEndPoint);
+            _tcpListener.Start();
+            _tcpListener.BeginAcceptTcpClient(Accept, null);
         }
 
         private static void SetRequestType(RequestType requestType)
@@ -39,31 +56,25 @@ namespace DiscordWinForm.NetworkManagers
             _requestInfo[0] = (byte)requestType;
         }
 
-        /// <summary>
-        /// Create new thread for accepting incoming messages
-        /// </summary>
-        public static void StartListenThread()
-        {
-            _sendingSocket.Listen();
-            Task.Run(() => { _sendingSocket.BeginAccept(Accept, null); });
-        }
-
         private static async void Accept(IAsyncResult res)  //Work in theory
         {
             try
             {
-                _sendingSocket.EndAccept(out byte[] buffer, res);
-                TextChatManager.SetMessage(buffer);
+                TcpClient tcpClient = _tcpListener.EndAcceptTcpClient(res);
+                byte[] buffer = new byte[tcpClient.Available - 9];
+                tcpClient.GetStream().Read(buffer, 0, buffer.Length);
+                TextChatManager.NewMessageReceived(ref buffer);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
-            finally { _sendingSocket.BeginAccept(Accept, null); }
+            finally { _tcpListener.BeginAcceptTcpClient(Accept, null); }
         }
 
         public static async Task SendTextMessageAsync(string message, int recipientID)
         {
             try
             {
-                _sendingSocket.SendAsync(CreateSendRequest(message, recipientID), 0);
+                MessageBox.Show($"Is socket connected : {_sendingSocket.Connected}");
+                _sendingSocket.Send(CreateSendRequest(message, recipientID), 0);
             }
             catch(Exception ex)
             {
@@ -75,7 +86,7 @@ namespace DiscordWinForm.NetworkManagers
         {
             SetRequestType(RequestType.SendTextMessage);
 
-            byte[] temp = Encoding.BigEndianUnicode.GetBytes(message);
+            byte[] temp = Encoding.Default.GetBytes(message);
             byte[] messageToSend = new byte[temp.Length + 9];
 
             Array.Copy(BitConverter.GetBytes(recipientID), 0, _requestInfo, 5, 4);
