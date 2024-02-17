@@ -92,6 +92,7 @@ namespace DiscordWinForm.NetworkManagers
             Array.Copy(BitConverter.GetBytes(recipientID), 0, _requestInfo, 5, 4);
             Array.Copy(_requestInfo, 0, messageToSend, 0, 9);
             Array.Copy(temp, 0, messageToSend, 9, temp.Length);
+            MessageBox.Show($"{BitConverter.ToInt32(new byte[] { messageToSend[5], messageToSend[6], messageToSend[7], messageToSend[8] })}");
 
             return messageToSend;
         }
