@@ -28,12 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "ds";
+            textBox1 = new TextBox();
+            btn = new Button();
+            SuspendLayout();
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(53, 157);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(496, 27);
+            textBox1.TabIndex = 0;
+            // 
+            // btn
+            // 
+            btn.Location = new Point(615, 156);
+            btn.Name = "btn";
+            btn.Size = new Size(161, 29);
+            btn.TabIndex = 1;
+            btn.Text = "Додати друга";
+            btn.UseVisualStyleBackColor = true;
+            btn.Click += btn_Click;
+            // 
+            // ds
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btn);
+            Controls.Add(textBox1);
+            Name = "ds";
+            Text = "ds";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private TextBox textBox1;
+        private Button btn;
     }
 }
